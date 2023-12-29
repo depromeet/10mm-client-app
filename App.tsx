@@ -1,7 +1,6 @@
 import React, {useEffect, useRef} from 'react';
 import {
   BackHandler,
-  Dimensions,
   Platform,
   StatusBar,
   View,
@@ -9,7 +8,7 @@ import {
 } from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import WebView from 'react-native-webview';
-
+import {NavigationContainer} from '@react-navigation/native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 function App(): React.JSX.Element {
@@ -40,36 +39,56 @@ function App(): React.JSX.Element {
     }
   }, []);
 
-  return (
-    <SafeAreaProvider>
-      <SafeAreaView edges={['top']}>
-        <View style={{height: Dimensions.get('window').height}}>
-          <View style={{flex: 1}}>
-            <StatusBar
-              barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-              backgroundColor={backgroundStyle.backgroundColor}
-            />
+  const InjectedCode = `(function() {
+    history.pushState = wrap(history.pushState);
+    history.replaceState = wrap(history.replaceState);
+    window.addEventListener('popstate', function(e) {
+      window.ReactNativeWebView.postMessage(JSON.stringify({type:'NAVIGATION',payload:{idx:e.state.idx}}));
+    });
+  
+    const meta = document.createElement('meta'); 
+    meta.setAttribute('content', 'viewport-fit=cover'); 
+    meta.setAttribute('name', 'viewport');
+    document.getElementsByTagName('head')[0].appendChild(meta);
 
+  })();
+  true; // without this, js parsing error comes up
+  `;
+
+  return (
+    <NavigationContainer>
+      <SafeAreaProvider>
+        <SafeAreaView style={{backgroundColor: '#141417', flex: 1}}>
+          <StatusBar
+            barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+            backgroundColor={backgroundStyle.backgroundColor}
+          />
+
+          <View style={{flex: 1}}>
             <WebView
               setSupportMultipleWindows={false}
               ref={webViewRef}
               javaScriptEnabled
               scalesPageToFit={false}
               allowsBackForwardNavigationGestures
+              onLoadStart={() => {
+                webViewRef.current?.injectJavaScript(InjectedCode);
+              }}
               textZoom={100}
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
               originWhitelist={['http://*', 'https://*', 'intent:*']}
               decelerationRate="normal"
               source={{
-                uri: 'https://10mm-client-web.vercel.app/timer',
-                flex: 1,
+                uri: 'https://www.10mm.today/',
               }}
+              bounces={false}
+              webviewDebuggingEnabled
             />
           </View>
-        </View>
-      </SafeAreaView>
-    </SafeAreaProvider>
+        </SafeAreaView>
+      </SafeAreaProvider>
+    </NavigationContainer>
   );
 }
 
