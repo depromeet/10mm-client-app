@@ -5,11 +5,31 @@ import {
   StatusBar,
   View,
   useColorScheme,
+  PermissionsAndroid,
+  Alert,
 } from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import WebView from 'react-native-webview';
 import {NavigationContainer} from '@react-navigation/native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+import messaging from '@react-native-firebase/messaging';
+
+async function requestUserPermission() {
+  const authStatus = await messaging().requestPermission();
+  const enabled =
+    authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+    authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+  if (enabled) {
+    console.log('Authorization status:', authStatus);
+  }
+  await messaging().registerDeviceForRemoteMessages();
+  messaging()
+    .getToken()
+    .then(token => {
+      Alert.alert('token', token);
+    });
+}
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -37,6 +57,40 @@ function App(): React.JSX.Element {
         );
       };
     }
+  }, []);
+
+  useEffect(() => {
+    // if aos
+    if (Platform.OS === 'android') {
+      PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+      );
+    }
+    requestUserPermission();
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    // Get the device token
+    // messaging()
+    //   .getToken()
+    //   .then(token => {
+    //     Alert.alert('token', token);
+    //   });
+    // If using other push notification providers (ie Amazon SNS, etc)
+    // you may need to get the APNs token instead for iOS:
+    // if(Platform.OS == 'ios') { messaging().getAPNSToken().then(token => { return saveTokenToDatabase(token); }); }
+    // Listen to whether the token changes
+    // return messaging().onTokenRefresh(token => {
+    //   saveTokenToDatabase(token);
+    // });
   }, []);
 
   const InjectedCode = `(function() {
