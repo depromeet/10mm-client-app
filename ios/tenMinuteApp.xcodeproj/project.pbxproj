@@ -32,6 +32,8 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* tenMinuteAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = tenMinuteAppTests.m; sourceTree = "<group>"; };
 		0204FAB12B405C9200EB987D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		0210F8892B46FEFF00D37418 /* tenMinuteAppRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = tenMinuteAppRelease.entitlements; path = tenMinuteApp/tenMinuteAppRelease.entitlements; sourceTree = "<group>"; };
+		0210F88A2B46FF1000D37418 /* tenMinuteApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = tenMinuteApp.entitlements; path = tenMinuteApp/tenMinuteApp.entitlements; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* tenMinuteApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tenMinuteApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = tenMinuteApp/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = tenMinuteApp/AppDelegate.mm; sourceTree = "<group>"; };
@@ -88,6 +90,8 @@
 		13B07FAE1A68108700A75B9A /* tenMinuteApp */ = {
 			isa = PBXGroup;
 			children = (
+				0210F88A2B46FF1000D37418 /* tenMinuteApp.entitlements */,
+				0210F8892B46FEFF00D37418 /* tenMinuteAppRelease.entitlements */,
 				0204FAB12B405C9200EB987D /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
@@ -483,6 +487,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = tenMinuteApp/tenMinuteApp.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = tenMinuteApp/Info.plist;
@@ -511,6 +516,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = tenMinuteApp/tenMinuteAppRelease.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = tenMinuteApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = 10MM;

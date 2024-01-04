@@ -23,7 +23,6 @@ async function requestUserPermission() {
   if (enabled) {
     console.log('Authorization status:', authStatus);
   }
-  await messaging().registerDeviceForRemoteMessages();
   messaging()
     .getToken()
     .then(token => {
@@ -79,11 +78,13 @@ function App(): React.JSX.Element {
 
   useEffect(() => {
     // Get the device token
-    // messaging()
-    //   .getToken()
-    //   .then(token => {
-    //     Alert.alert('token', token);
-    //   });
+    (async () => {
+      await messaging()
+        .getToken()
+        .then(token => {
+          Alert.alert('token', token);
+        });
+    })();
     // If using other push notification providers (ie Amazon SNS, etc)
     // you may need to get the APNs token instead for iOS:
     // if(Platform.OS == 'ios') { messaging().getAPNSToken().then(token => { return saveTokenToDatabase(token); }); }
